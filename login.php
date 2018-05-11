@@ -6,6 +6,10 @@ if( isset($_SESSION['user_id']) ){
 	header("Location: /");
 }
 
+if( isset($_SESSION['difficulty']) ){
+	echo $_SESSION['difficulty'];
+}
+
 require 'database.php';
 
 if(!empty($_POST['email']) && !empty($_POST['password'])):

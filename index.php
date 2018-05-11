@@ -3,6 +3,7 @@
 session_start();
 
 require 'database.php';
+require 'settings.php';
 
 if( isset($_SESSION['user_id']) ){
 
@@ -24,15 +25,21 @@ if( isset($_SESSION['user_id']) ){
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Welcome to your Web App</title>
+	<title>Security project</title>
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 	<link href='http://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
 </head>
 <body>
 
 	<div class="header">
-		<a href="/">Your App Name</a>
+		<a href="/">Security project</a>
 	</div>
+	<textarea>Er zijn drie security niveaus beschikbaar:&#13;&#10;-low&#13;&#10;-medium&#13;&#10;-high</textarea>
+	<!--<textarea style="resize: none; width: 300px; height: 200px;">Er zijn drie security niveaus beschikbaar:&#13;&#10;-low&#13;&#10;-medium&#13;&#10;-high</textarea>-->
+
+	<?php 
+		$_SESSION['difficulty'] = $_DIFFICULTY;
+	?>
 
 	<?php if( !empty($user) ): ?>
 

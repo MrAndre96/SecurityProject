@@ -42,3 +42,9 @@ input[type="submit"]:hover{
 	color:#333;
 	text-decoration: none;
 }
+
+textarea{
+	resize: none;
+	width: 300px;
+	height: 200px;
+}
