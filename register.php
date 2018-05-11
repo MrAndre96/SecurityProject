@@ -47,7 +47,7 @@ endif;
 	<?php endif; ?>
 
 	<h1>Register</h1>
-	<span>or <a href="login.php">login here</a></span>
+	<span>or <a href="index.php">login here</a></span>
 
 	<form action="register.php" method="POST">
 		

@@ -2,59 +2,66 @@
 
 session_start();
 
-require 'database.php';
-require 'settings.php';
-
 if( isset($_SESSION['user_id']) ){
+	header("Location: oldindex.php");
+}
 
-	$records = $conn->prepare('SELECT id,email,password FROM users WHERE id = :id');
-	$records->bindParam(':id', $_SESSION['user_id']);
+if( isset($_SESSION['difficulty']) ){
+	echo $_SESSION['difficulty'];
+}
+
+require 'database.php';
+
+if(!empty($_POST['email']) && !empty($_POST['password'])):
+	
+	$records = $conn->prepare('SELECT id,email,password FROM users WHERE email = :email');
+	$records->bindParam(':email', $_POST['email']);
 	$records->execute();
 	$results = $records->fetch(PDO::FETCH_ASSOC);
 
-	$user = NULL;
+	$message = '';
 
-	if( count($results) > 0){
-		$user = $results;
+	if(count($results) > 0 && password_verify($_POST['password'], $results['password']) ){
+
+		$_SESSION['user_id'] = $results['id'];
+		header("Location: oldindex.php");
+
+	} else {
+		$message = 'Sorry, those credentials do not match';
 	}
 
-}
+endif;
 
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Security project</title>
+	<title>Login Below</title>
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 	<link href='http://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
 </head>
 <body>
 
 	<div class="header">
-		<a href="/">Security project</a>
+		<a href="/">Your App Name</a>
 	</div>
-	<textarea>Er zijn drie security niveaus beschikbaar:&#13;&#10;-low&#13;&#10;-medium&#13;&#10;-high</textarea>
-	<!--<textarea style="resize: none; width: 300px; height: 200px;">Er zijn drie security niveaus beschikbaar:&#13;&#10;-low&#13;&#10;-medium&#13;&#10;-high</textarea>-->
 
-	<?php 
-		$_SESSION['difficulty'] = $_DIFFICULTY;
-	?>
-
-	<?php if( !empty($user) ): ?>
-
-		<br />Welcome <?= $user['email']; ?> 
-		<br /><br />You are successfully logged in!
-		<br /><br />
-		<a href="logout.php">Logout?</a>
-
-	<?php else: ?>
-
-		<h1>Please Login or Register</h1>
-		<a href="login.php">Login</a> or
-		<a href="register.php">Register</a>
-
+	<?php if(!empty($message)): ?>
+		<p><?= $message ?></p>
 	<?php endif; ?>
+
+	<h1>Login</h1>
+	<span>or <a href="register.php">register here</a></span>
+
+	<form action="index.php" method="POST">
+		
+		<input type="text" placeholder="Enter your email" name="email">
+		<input type="password" placeholder="and password" name="password">
+
+		<input type="submit">
+
+	</form>
 
 </body>
 </html>
