@@ -3,7 +3,6 @@
 session_start();
 
 require 'database.php';
-require 'settings.php';
 
 if( isset($_SESSION['user_id']) ){
 
@@ -37,9 +36,6 @@ if( isset($_SESSION['user_id']) ){
 	<textarea>Er zijn drie security niveaus beschikbaar:&#13;&#10;-low&#13;&#10;-medium&#13;&#10;-high</textarea>
 	<!--<textarea style="resize: none; width: 300px; height: 200px;">Er zijn drie security niveaus beschikbaar:&#13;&#10;-low&#13;&#10;-medium&#13;&#10;-high</textarea>-->
 
-	<?php 
-		$_SESSION['difficulty'] = $_DIFFICULTY;
-	?>
 
 	<?php if( !empty($user) ): ?>
 

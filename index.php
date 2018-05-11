@@ -6,31 +6,57 @@ if( isset($_SESSION['user_id']) ){
 	header("Location: oldindex.php");
 }
 
+require 'database.php';
+require 'settings.php';
+
+$_SESSION['difficulty'] = $_DIFFICULTY;
+
 if( isset($_SESSION['difficulty']) ){
-	echo $_SESSION['difficulty'];
+	//echo $_SESSION['difficulty'];
 }
 
-require 'database.php';
-
-if(!empty($_POST['email']) && !empty($_POST['password'])):
+if(!empty($_POST['email']) && !empty($_POST['password'])){
 	
-	$records = $conn->prepare('SELECT id,email,password FROM users WHERE email = :email');
-	$records->bindParam(':email', $_POST['email']);
-	$records->execute();
-	$results = $records->fetch(PDO::FETCH_ASSOC);
 
-	$message = '';
+	if($_SESSION['difficulty'] == 'low'){
+		//$query  = 'SELECT id,email,password FROM users WHERE email =\'test\';';
+		//$query  = 'SELECT id,email,password FROM users WHERE email =\'test\' OR 1=1;';
+		$query  = 'SELECT id,email,password FROM users WHERE email =\'' . $_POST['email'] . '\';';
+		echo $query;
+		$result = mysqli_query($connection, $query);
 
-	if(count($results) > 0 && password_verify($_POST['password'], $results['password']) ){
 
-		$_SESSION['user_id'] = $results['id'];
-		header("Location: oldindex.php");
+		while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+			echo $row['id'] . ', ' . $row['email'] . ', ' . $row['password'] . '<br>';
+		}
 
-	} else {
-		$message = 'Sorry, those credentials do not match';
+		mysqli_close($connection);
+
+	} else if($_SESSION['difficulty'] == 'medium'){
+
+	} else if($_SESSION['difficulty'] == 'high'){
+		$records = $conn->prepare('SELECT id,email,password FROM users WHERE email = :email');
+		$records->bindParam(':email', $_POST['email']);
+		$records->execute();
+		$results = $records->fetch(PDO::FETCH_ASSOC);
+
+		$message = '';
+
+		if(count($results) > 0 && password_verify($_POST['password'], $results['password']) ){
+
+			$_SESSION['user_id'] = $results['id'];
+			header("Location: oldindex.php");
+
+		} else {
+			$message = 'Sorry, those credentials do not match';
+		}
+	} else{
+		echo 'Wrong settings specified in settings file';
 	}
 
-endif;
+
+}
+//endif;
 
 ?>
 
