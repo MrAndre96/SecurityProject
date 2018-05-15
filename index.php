@@ -105,16 +105,6 @@ if (isset($_POST['submit'])){
 			<div class="header">
 				<a href="/">Your App Name</a>
 			</div>
-
-			<div style="margin-left: 0px; text-align: left">
-				<form action="#" method="POST">
-					
-					<input name="difficulty" type="submit" value="low" style="width: 100px; background-color: green">
-					<input name="difficulty" type="submit" value="medium" style="width: 100px; background-color: orange">
-					<input name="difficulty" type="submit" value="high" style="width: 100px; background-color: red">
-
-				</form>
-			</div>
 			
 			<?php if(!empty($user)){ ?>
 

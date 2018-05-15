@@ -1,13 +1,8 @@
 <?php
 $server = 'localhost';
 $username = 'root';
-$password = 'd8n2';
+$password = '';
 $database = 'SecurityProject';
-
-<<<<<<< HEAD
-=======
-echo 'In database.php: ' . $_POST['difficulty'] . '<br>';
->>>>>>> bc0cffbbfe3ee3b8857d346d366e1ce9f87186a9
 
 if($_SESSION['difficulty'] == 'low'){
 	$connection = mysqli_connect($server, $username, $password, $database);
