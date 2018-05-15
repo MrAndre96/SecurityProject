@@ -1,7 +1,7 @@
 <?php
 $server = 'localhost';
 $username = 'root';
-$password = 'd8n2';
+$password = '';
 $database = 'securityproject';
 
 require 'settings.php';
