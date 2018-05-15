@@ -2,8 +2,18 @@
 
 session_start();
 
+echo 'before difficulty variable: ' . $_POST['difficulty'] . '<br>';
+
+// Start with default low if no choice has been made.
+if (isset($_POST['difficulty'])) {
+	$_SESSION['difficulty'] = $_POST['difficulty'];
+} else {
+	$_SESSION['difficulty'] = 'low';
+}
 require 'database.php';
-require 'settings.php';
+
+echo 'after difficulty variable: ' . $_SESSION['difficulty'] . '<br>';
+
 
 if( isset($_SESSION['user_id']) ){
 	if($_SESSION['difficulty'] == 'low'){
@@ -22,11 +32,11 @@ if( isset($_SESSION['user_id']) ){
 	}
 }
 
-$_SESSION['difficulty'] = $_DIFFICULTY;
-
 if (isset($_POST['submit'])){
 	if(!empty($_POST['email']) && !empty($_POST['password'])){
 		
+		echo 'reached:';
+		echo 'difficulty variable' . $_SESSION['difficulty'];
 
 		if($_SESSION['difficulty'] == 'low'){
 			//$query  = 'SELECT id,email,password FROM users WHERE email =\'test\';';
@@ -43,17 +53,7 @@ if (isset($_POST['submit'])){
 			mysqli_close($connection);
 
 		} else if($_SESSION['difficulty'] == 'medium'){
-			  preg_match_all("/([A-z 0-9_]+)/", $_POST['email'], $out, 0);
-			  $email = $out[0][0];
-			  $query  = 'SELECT id,email,password FROM users WHERE email =\'' . $email . '\';';
-			  echo $query;
-			  $result = mysqli_query($connection, $query);
 
-			  while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-			   echo $row['id'] . ', ' . $row['email'] . ', ' . $row['password'] . '<br>';
-			  }
-
-			  mysqli_close($connection);
 		} else if($_SESSION['difficulty'] == 'high'){
 			$records = $conn->prepare('SELECT id,email,password FROM users WHERE email = :email');
 			$records->bindParam(':email', $_POST['email']);
@@ -70,13 +70,14 @@ if (isset($_POST['submit'])){
 			} else {
 				$message = 'Sorry, those credentials do not match';
 			}
-		} else{
-			echo 'Wrong settings specified in settings file';
+		} else {
+			echo 'Index.php: Wrong settings specified in settings file' . '<br>';
 		}
 
 
 	}
 }
+
 //endif;
 
 ?>
@@ -89,6 +90,16 @@ if (isset($_POST['submit'])){
 	<link href='http://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
 </head>
 <body>
+
+<div style="margin-left: 0px; text-align: left">
+	<form action="index.php" method="POST">
+		
+		<input name="difficulty" type="submit" value="low" style="width: 100px; background-color: green">
+		<input name="difficulty" type="submit" value="medium" style="width: 100px; background-color: orange">
+		<input name="difficulty" type="submit" value="high" style="width: 100px; background-color: red">
+
+	</form>
+</div>
 
 	<div class="header">
 		<a href="/">Your App Name</a>

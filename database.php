@@ -1,13 +1,12 @@
 <?php
 $server = 'localhost';
 $username = 'root';
-$password = '';
-$database = 'securityproject';
+$password = 'd8n2';
+$database = 'SecurityProject';
 
-require 'settings.php';
+echo 'In database.php: ' . $_POST['difficulty'] . '<br>';
 
-
-if($_DIFFICULTY == 'low'){
+if($_SESSION['difficulty'] == 'low'){
 	$connection = mysqli_connect($server, $username, $password, $database);
 	if (!$connection)
 	{
@@ -15,7 +14,7 @@ if($_DIFFICULTY == 'low'){
 	}
 	else
 	{
-		echo "Connected<br>";
+		//echo "Connected<br>";
 	}
 
 	//$dbcheck = mysqli_select_db("$database");
@@ -26,14 +25,14 @@ if($_DIFFICULTY == 'low'){
 	//	echo "Connected with $database";
 	//}
 
-} else if($_DIFFICULTY == 'medium'){
+} else if($_SESSION['difficulty'] == 'medium'){
 
-} else if($_DIFFICULTY == 'high'){
+} else if($_SESSION['difficulty'] == 'high'){
 	try{
 		$conn = new PDO("mysql:host=$server;dbname=$database;", $username, $password);
 	} catch(PDOException $e){
 		die( "Connection failed: " . $e->getMessage());
 	}
 } else{
-	echo 'Wrong settings specified in settings file';
+	echo 'Database.php: Wrong settings specified in settings file' . '<br>';
 }
