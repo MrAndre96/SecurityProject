@@ -19,6 +19,11 @@ if (isset($_POST['submit'])){
 		} elseif($_POST['password'] != $_POST['confirm_password']) {
 			$message = "Your passwords don't match";
 		} else {
+            try{
+                $conn = new PDO("mysql:host=$server;dbname=$database;", $username, $password);
+            } catch(PDOException $e){
+                die( "Connection failed: " . $e->getMessage());
+            }
 			// Enter the new user in the database
 			$sql = "INSERT INTO users (email, password) VALUES (:email, :password)";
 			$stmt = $conn->prepare($sql);

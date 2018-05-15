@@ -1,8 +1,6 @@
 <?php
 session_start();
 
-echo 'before difficulty variable: ' . $_POST['difficulty'] . '<br>';
-
 // Start with default low if no choice has been made.
 if (isset($_POST['difficulty'])) {
 	$_SESSION['difficulty'] = $_POST['difficulty'];
@@ -10,8 +8,6 @@ if (isset($_POST['difficulty'])) {
 	$_SESSION['difficulty'] = 'low';
 }
 require 'database.php';
-
-echo 'after difficulty variable: ' . $_SESSION['difficulty'] . '<br>';
 
 
 if( isset($_SESSION['user_id']) ){
@@ -33,9 +29,6 @@ if( isset($_SESSION['user_id']) ){
 
 if (isset($_POST['submit'])){
 	if(!empty($_POST['email']) && !empty($_POST['password'])){
-		
-		echo 'reached:';
-		echo 'difficulty variable' . $_SESSION['difficulty'];
 
 		if($_SESSION['difficulty'] == 'low'){
 			//$query  = 'SELECT id,email,password FROM users WHERE email =\'test\';';
@@ -46,7 +39,7 @@ if (isset($_POST['submit'])){
 			// $query  = 'SELECT id,email,password FROM users WHERE email = ' . $email . ' && password = ' . $password . '';
 			
 			$email = $_POST['email'];
-			$password = $_POST['password'];
+			$password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
 			//Check username and password from database
 			$sql='SELECT id,email,password FROM users WHERE email="'.$email.'" && password="'.$password.'"';
