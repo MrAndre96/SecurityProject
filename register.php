@@ -17,7 +17,8 @@ if(!empty($_POST['email']) && !empty($_POST['password'])):
 	$stmt = $conn->prepare($sql);
 
 	$stmt->bindParam(':email', $_POST['email']);
-	$stmt->bindParam(':password', password_hash($_POST['password'], PASSWORD_BCRYPT));
+	$hash = password_hash($_POST['password'], PASSWORD_BCRYPT);
+	$stmt->bindParam(':password', $hash);
 
 	if( $stmt->execute() ):
 		$message = 'Successfully created new user';
