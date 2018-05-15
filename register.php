@@ -72,8 +72,8 @@ function checkEmail($email) {
 	<form action="register.php" method="POST">
 		
 		<input type="text" placeholder="Enter your email" name="email">
-		<input type="text" placeholder="and password" name="password">
-		<input type="text" placeholder="confirm password" name="confirm_password">
+		<input type="password" placeholder="and password" name="password">
+		<input type="password" placeholder="confirm password" name="confirm_password">
 		<input type="submit">
 
 	</form>
