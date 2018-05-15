@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 require 'database.php';
@@ -7,7 +6,7 @@ require 'settings.php';
 
 if( isset($_SESSION['user_id']) ){
 	if($_SESSION['difficulty'] == 'low'){
-		
+		echo 'Logged in';
 	} else if($_SESSION['difficulty'] == 'high'){
 		$records = $conn->prepare('SELECT id,email,password FROM users WHERE id = :id');
 		$records->bindParam(':id', $_SESSION['user_id']);
@@ -31,16 +30,27 @@ if (isset($_POST['submit'])){
 		if($_SESSION['difficulty'] == 'low'){
 			//$query  = 'SELECT id,email,password FROM users WHERE email =\'test\';';
 			//$query  = 'SELECT id,email,password FROM users WHERE email =\'test\' OR 1=1;';
-			$query  = 'SELECT id,email,password FROM users WHERE email =\'' . $_POST['email'] . '\';';
-			echo $query;
-			$result = mysqli_query($connection, $query);
+			// $email = $_POST['email'];
+			// $password = $_POST['password'];
+			
+			// $query  = 'SELECT id,email,password FROM users WHERE email = ' . $email . ' && password = ' . $password . '';
+			
+			$email = $_POST['email'];
+			$password = $_POST['password'];
 
+			//Check username and password from database
+			$sql='SELECT id,email,password FROM users WHERE email="'.$email.'" && password="'.$password.'"';
+			
+			$records = mysqli_query($connection, $sql);
+			$results = mysqli_fetch_array($records,MYSQLI_ASSOC);
+			$message = '';
 
-			while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-				echo $row['id'] . ', ' . $row['email'] . ', ' . $row['password'] . '<br>';
+			if($results){
+				$_SESSION['user_id'] = $results['id'];
+				header("Location: /");
+			} else {
+				$message = 'Sorry, those credentials do not match';
 			}
-
-			mysqli_close($connection);
 
 		} else if($_SESSION['difficulty'] == 'medium'){
 			  preg_match_all("/([A-z 0-9_]+)/", $_POST['email'], $out, 0); // Search the input for all characters between [] and store them in $out
