@@ -43,7 +43,17 @@ if (isset($_POST['submit'])){
 			mysqli_close($connection);
 
 		} else if($_SESSION['difficulty'] == 'medium'){
+			  preg_match_all("/([A-z 0-9_]+)/", $_POST['email'], $out, 0);
+			  $email = $out[0][0];
+			  $query  = 'SELECT id,email,password FROM users WHERE email =\'' . $email . '\';';
+			  echo $query;
+			  $result = mysqli_query($connection, $query);
 
+			  while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+			   echo $row['id'] . ', ' . $row['email'] . ', ' . $row['password'] . '<br>';
+			  }
+
+			  mysqli_close($connection);
 		} else if($_SESSION['difficulty'] == 'high'){
 			$records = $conn->prepare('SELECT id,email,password FROM users WHERE email = :email');
 			$records->bindParam(':email', $_POST['email']);
