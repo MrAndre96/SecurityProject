@@ -34,6 +34,8 @@ if( isset($_SESSION['user_id']) ){
 if (isset($_POST['submit'])){
 	if(!empty($_POST['email']) && !empty($_POST['password'])){
 		
+		echo 'reached:';
+		echo 'difficulty variable' . $_SESSION['difficulty'];
 
 		if($_SESSION['difficulty'] == 'low'){
 			echo 'a';
@@ -58,11 +60,6 @@ if (isset($_POST['submit'])){
 			  echo $query;
 			  $result = mysqli_query($connection, $query);
 
-			  while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-			   echo $row['id'] . ', ' . $row['email'] . ', ' . $row['password'] . '<br>';
-			  }
-
-			  mysqli_close($connection);
 		} else if($_SESSION['difficulty'] == 'high'){
 			$records = $conn->prepare('SELECT id,email,password FROM users WHERE email = :email');
 			$records->bindParam(':email', $_POST['email']);
@@ -79,8 +76,8 @@ if (isset($_POST['submit'])){
 			} else {
 				$message = 'Sorry, those credentials do not match';
 			}
-		} else{
-			echo 'Wrong settings specified in settings file';
+		} else {
+			echo 'Index.php: Wrong settings specified in settings file' . '<br>';
 		}
 
 
@@ -91,53 +88,59 @@ if (isset($_POST['submit'])){
 
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Login Below</title>
-	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-	<link href='http://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
-</head>
-<body>
+	<head>
+		<title>Login Below</title>
+		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+		<link href='http://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
+	</head>
+		<body>
+			<form action="index.php" method="POST">
+				
+				<input name="difficulty" type="submit" value="low" style="width: 100px; background-color: green">
+				<input name="difficulty" type="submit" value="medium" style="width: 100px; background-color: orange">
+				<input name="difficulty" type="submit" value="high" style="width: 100px; background-color: red">
 
-	<div class="header">
-		<a href="/">Your App Name</a>
-	</div>
+			</form>
 
-	<div style="margin-left: 0px; text-align: left">
-		<form action="#" method="POST">
+			<div class="header">
+				<a href="/">Your App Name</a>
+			</div>
+
+			<div style="margin-left: 0px; text-align: left">
+				<form action="#" method="POST">
+					
+					<input name="difficulty" type="submit" value="low" style="width: 100px; background-color: green">
+					<input name="difficulty" type="submit" value="medium" style="width: 100px; background-color: orange">
+					<input name="difficulty" type="submit" value="high" style="width: 100px; background-color: red">
+
+				</form>
+			</div>
 			
-			<input name="difficulty" type="submit" value="low" style="width: 100px; background-color: green">
-			<input name="difficulty" type="submit" value="medium" style="width: 100px; background-color: orange">
-			<input name="difficulty" type="submit" value="high" style="width: 100px; background-color: red">
+			<?php if(!empty($user)){ ?>
 
-		</form>
-	</div>
-	
-	<?php if(!empty($user)){ ?>
+				<br />Welcome <?= $user['email']; ?> 
+				<br /><br />You are successfully logged in!
+				<br /><br />
+				<a href="logout.php">Logout?</a>
 
-		<br />Welcome <?= $user['email']; ?> 
-		<br /><br />You are successfully logged in!
-		<br /><br />
-		<a href="logout.php">Logout?</a>
+			<?php }else{ ?>
 
-	<?php }else{ ?>
+			<?php if(!empty($message)){ ?>
+				<p><?php $message ?></p>
+			<?php } ?>
 
-		<?php if(!empty($message)){ ?>
-		<p><?php $message ?></p>
+			<h1>Login</h1>
+			<span>or <a href="register.php">register here</a></span>
+
+			<form action="#" method="POST">
+				
+				<input type="text" placeholder="Enter your email" name="email">
+				<input type="password" placeholder="and password" name="password">
+
+				<input name="submit" type="submit" value="Inloggen">
+
+			</form>
+
 		<?php } ?>
-
-		<h1>Login</h1>
-		<span>or <a href="register.php">register here</a></span>
-
-		<form action="#" method="POST">
-			
-			<input type="text" placeholder="Enter your email" name="email">
-			<input type="password" placeholder="and password" name="password">
-
-			<input name="submit" type="submit" value="Inloggen">
-
-		</form>
-
-	<?php } ?>
-
-</body>
+	</body>
 </html>
