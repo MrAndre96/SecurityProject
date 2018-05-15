@@ -55,8 +55,7 @@ if (isset($_POST['submit'])){
 		} else if($_SESSION['difficulty'] == 'medium'){
             preg_match_all("/([A-z0-9@._]+)/", $_POST['email'], $out, 0); // Search the input for all characters between [] and store them in $out
             $email = $out[0][0]; // Access the first element (2D array)
-            $sql  = 'SELECT id,email,password FROM users WHERE email =\'' . $email . '\';'; // Do the query using the fixed.
-            echo($sql);
+            $sql  = 'SELECT id,email,password FROM users WHERE email ="'.$email.'" && password="'.$_POST['password'].'"';
 
             $records = mysqli_query($connection, $sql);
             $results = mysqli_fetch_array($records,MYSQLI_ASSOC);
@@ -88,8 +87,6 @@ if (isset($_POST['submit'])){
 		} else {
 			echo 'Index.php: Wrong settings specified in settings file' . '<br>';
 		}
-
-
 	}
 }
 
@@ -104,15 +101,28 @@ if (isset($_POST['submit'])){
 	</head>
 		<body>
 			<form action="index.php" method="POST">
+                Security Level:&nbsp
+                <?php if($_POST['difficulty'] == 'low'){ ?>
+                    <input name="difficulty" type="submit" value="low" style="width: 100px; background-color: red">
+                <?php } else{ ?>
+                    <input name="difficulty" type="submit" value="low" style="width: 100px; background-color: gray">
+                <?php }?>
 
-				<input name="difficulty" type="submit" value="low" style="width: 100px; background-color: green">
-				<input name="difficulty" type="submit" value="medium" style="width: 100px; background-color: orange">
-				<input name="difficulty" type="submit" value="high" style="width: 100px; background-color: red">
+                <?php if($_POST['difficulty'] == 'medium'){ ?>
+                    <input name="difficulty" type="submit" value="medium" style="width: 100px; background-color: orange">
+                <?php } else{ ?>
+                    <input name="difficulty" type="submit" value="medium" style="width: 100px; background-color: gray">
+                <?php }?>
 
+                <?php if($_POST['difficulty'] == 'high'){ ?>
+                    <input name="difficulty" type="submit" value="high" style="width: 100px; background-color: green">
+                <?php } else{ ?>
+                    <input name="difficulty" type="submit" value="high" style="width: 100px; background-color: gray">
+                <?php }?>
 			</form>
 
 			<div class="header">
-				<a href="/">Your App Name</a>
+				<a href="/">Temp App Name</a>
 			</div>
 
 			<?php if(!empty($user)){ ?>
