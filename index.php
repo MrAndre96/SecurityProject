@@ -2,13 +2,13 @@
 session_start();
 if (isset($_POST['difficulty'])) {
 	$_SESSION['difficulty'] = $_POST['difficulty'];
-} else if(!$_SESSION['difficulty']) {
+} else if(isset($_SESSION['difficulty']) && !$_SESSION['difficulty']) {
 	$_SESSION['difficulty'] = 'low';
 }
 require 'database.php';
 
 if( isset($_SESSION['user_id']) ){
-	if($_SESSION['difficulty'] == 'low'){
+	if($_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium'){
 		$sql='SELECT id,email,password FROM users WHERE id="'.$_SESSION['user_id'].'"';
 
 		$records = mysqli_query($connection, $sql);
@@ -40,7 +40,7 @@ if (isset($_POST['submit'])){
 		if($_SESSION['difficulty'] == 'low'){
 			//Check username and password from database
 			$sql='SELECT id,email,password FROM users WHERE email="'.$_POST['email'].'" && password="'.$_POST['password'].'"';
-			
+
 			$records = mysqli_query($connection, $sql);
 			$results = mysqli_fetch_array($records,MYSQLI_ASSOC);
 			$message = '';
@@ -53,11 +53,21 @@ if (isset($_POST['submit'])){
 			}
 
 		} else if($_SESSION['difficulty'] == 'medium'){
-			  preg_match_all("/([A-z 0-9_]+)/", $_POST['email'], $out, 0); // Search the input for all characters between [] and store them in $out
-			  $email = $out[0][0]; // Access the first element (2D array)
-			  $query  = 'SELECT id,email,password FROM users WHERE email =\'' . $email . '\';'; // Do the query using the fixed.
-			  echo $query;
-			  $result = mysqli_query($connection, $query);
+            preg_match_all("/([A-z0-9@._]+)/", $_POST['email'], $out, 0); // Search the input for all characters between [] and store them in $out
+            $email = $out[0][0]; // Access the first element (2D array)
+            $sql  = 'SELECT id,email,password FROM users WHERE email =\'' . $email . '\';'; // Do the query using the fixed.
+            echo($sql);
+
+            $records = mysqli_query($connection, $sql);
+            $results = mysqli_fetch_array($records,MYSQLI_ASSOC);
+            $message = '';
+
+            if($results){
+                $_SESSION['user_id'] = $results['id'];
+                header("Location: /");
+            } else {
+                $message = 'Sorry, those credentials do not match';
+            }
 
 		} else if($_SESSION['difficulty'] == 'high'){
 			$records = $conn->prepare('SELECT id,email,password FROM users WHERE email = :email');

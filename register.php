@@ -28,8 +28,9 @@ if (isset($_POST['submit'])){
 			$stmt = $conn->prepare($sql);
 
 			$stmt->bindParam(':email', $_POST['email']);
-			$hash = password_hash($_POST['password'], PASSWORD_BCRYPT);
-			$stmt->bindParam(':password', $hash);
+
+			$pass = ($_SESSION['difficulty'] == 'high') ? password_hash($_POST['password'], PASSWORD_BCRYPT) : $_POST['password'];
+			$stmt->bindParam(':password', $pass);
 
 			if ($stmt->execute()) {
 				$message = 'Successfully created new user';
