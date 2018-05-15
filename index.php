@@ -1,18 +1,22 @@
 <?php
 session_start();
-
-// Start with default low if no choice has been made.
 if (isset($_POST['difficulty'])) {
 	$_SESSION['difficulty'] = $_POST['difficulty'];
-} else {
+} else if(!$_SESSION['difficulty']) {
 	$_SESSION['difficulty'] = 'low';
 }
 require 'database.php';
 
-
 if( isset($_SESSION['user_id']) ){
 	if($_SESSION['difficulty'] == 'low'){
-		echo 'Logged in';
+		$sql='SELECT id,email,password FROM users WHERE id="'.$_SESSION['user_id'].'"';
+
+		$records = mysqli_query($connection, $sql);
+		$results = mysqli_fetch_array($records,MYSQLI_ASSOC);
+		$user = NULL;
+		if(count($results) > 0){
+			$user = $results;
+		}
 	} else if($_SESSION['difficulty'] == 'high'){
 		$records = $conn->prepare('SELECT id,email,password FROM users WHERE id = :id');
 		$records->bindParam(':id', $_SESSION['user_id']);
@@ -21,7 +25,7 @@ if( isset($_SESSION['user_id']) ){
 
 		$user = NULL;
 
-		if( count($results) > 0){
+		if(count($results) > 0){
 			$user = $results;
 		}
 	}
@@ -29,20 +33,13 @@ if( isset($_SESSION['user_id']) ){
 
 if (isset($_POST['submit'])){
 	if(!empty($_POST['email']) && !empty($_POST['password'])){
+		
+		echo 'reached:';
+		echo 'difficulty variable' . $_SESSION['difficulty'];
 
 		if($_SESSION['difficulty'] == 'low'){
-			//$query  = 'SELECT id,email,password FROM users WHERE email =\'test\';';
-			//$query  = 'SELECT id,email,password FROM users WHERE email =\'test\' OR 1=1;';
-			// $email = $_POST['email'];
-			// $password = $_POST['password'];
-			
-			// $query  = 'SELECT id,email,password FROM users WHERE email = ' . $email . ' && password = ' . $password . '';
-			
-			$email = $_POST['email'];
-			$password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-
 			//Check username and password from database
-			$sql='SELECT id,email,password FROM users WHERE email="'.$email.'" && password="'.$password.'"';
+			$sql='SELECT id,email,password FROM users WHERE email="'.$_POST['email'].'" && password="'.$_POST['password'].'"';
 			
 			$records = mysqli_query($connection, $sql);
 			$results = mysqli_fetch_array($records,MYSQLI_ASSOC);
@@ -86,61 +83,53 @@ if (isset($_POST['submit'])){
 	}
 }
 
-//endif;
-
 ?>
 
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Login Below</title>
-	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-	<link href='http://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
-</head>
-<body>
+	<head>
+		<title>Login Below</title>
+		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+		<link href='http://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
+	</head>
+		<body>
+			<form action="index.php" method="POST">
 
-<div style="margin-left: 0px; text-align: left">
-	<form action="index.php" method="POST">
-		
-		<input name="difficulty" type="submit" value="low" style="width: 100px; background-color: green">
-		<input name="difficulty" type="submit" value="medium" style="width: 100px; background-color: orange">
-		<input name="difficulty" type="submit" value="high" style="width: 100px; background-color: red">
+				<input name="difficulty" type="submit" value="low" style="width: 100px; background-color: green">
+				<input name="difficulty" type="submit" value="medium" style="width: 100px; background-color: orange">
+				<input name="difficulty" type="submit" value="high" style="width: 100px; background-color: red">
 
-	</form>
-</div>
+			</form>
 
-	<div class="header">
-		<a href="/">Your App Name</a>
-	</div>
+			<div class="header">
+				<a href="/">Your App Name</a>
+			</div>
 
-	
-	
-	<?php if( !empty($user) ): ?>
+			<?php if(!empty($user)){ ?>
 
-		<br />Welcome <?= $user['email']; ?> 
-		<br /><br />You are successfully logged in!
-		<br /><br />
-		<a href="logout.php">Logout?</a>
+				<br />Welcome <?= $user['email']; ?>
+				<br /><br />You are successfully logged in!
+				<br /><br />
+				<a href="logout.php">Logout?</a>
 
-	<?php else: ?>
+			<?php }else{ ?>
 
-		<?php if(!empty($message)): ?>
-		<p><?= $message ?></p>
-		<?php endif; ?>
+			<?php if(!empty($message)){ ?>
+				<p><?php $message ?></p>
+			<?php } ?>
 
-		<h1>Login</h1>
-		<span>or <a href="register.php">register here</a></span>
+			<h1>Login</h1>
+			<span>or <a href="register.php">register here</a></span>
 
-		<form action="#" method="POST">
-			
-			<input type="text" placeholder="Enter your email" name="email">
-			<input type="password" placeholder="and password" name="password">
+			<form action="#" method="POST">
 
-			<input name="submit" type="submit" value="Inloggen">
+				<input type="text" placeholder="Enter your email" name="email">
+				<input type="password" placeholder="and password" name="password">
 
-		</form>
+				<input name="submit" type="submit" value="Inloggen">
 
-	<?php endif; ?>
+			</form>
 
-</body>
+		<?php } ?>
+	</body>
 </html>
