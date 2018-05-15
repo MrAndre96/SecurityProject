@@ -43,9 +43,9 @@ if (isset($_POST['submit'])){
 			mysqli_close($connection);
 
 		} else if($_SESSION['difficulty'] == 'medium'){
-			  preg_match_all("/([A-z 0-9_]+)/", $_POST['email'], $out, 0);
-			  $email = $out[0][0];
-			  $query  = 'SELECT id,email,password FROM users WHERE email =\'' . $email . '\';';
+			  preg_match_all("/([A-z 0-9_]+)/", $_POST['email'], $out, 0); // Search the input for all characters between [] and store them in $out
+			  $email = $out[0][0]; // Access the first element (2D array)
+			  $query  = 'SELECT id,email,password FROM users WHERE email =\'' . $email . '\';'; // Do the query using the fixed.
 			  echo $query;
 			  $result = mysqli_query($connection, $query);
 
