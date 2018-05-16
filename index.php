@@ -2,7 +2,7 @@
 session_start();
 if (isset($_POST['difficulty'])) {
 	$_SESSION['difficulty'] = $_POST['difficulty'];
-} else if(!$_SESSION['difficulty']) {
+} else if(empty($_SESSION['difficulty'])) {
 	$_SESSION['difficulty'] = 'low';
 }
 require 'database.php';
@@ -33,12 +33,8 @@ if( isset($_SESSION['user_id']) ){
 
 if (isset($_POST['submit'])){
 	if(!empty($_POST['email']) && !empty($_POST['password'])){
-		
-		echo 'reached:';
-		echo 'difficulty variable' . $_SESSION['difficulty'];
 
 		if($_SESSION['difficulty'] == 'low'){
-			echo 'a';
 			//Check username and password from database
 			$sql='SELECT id,email,password FROM users WHERE email="'.$_POST['email'].'" && password="'.$_POST['password'].'"';
 			
@@ -68,7 +64,7 @@ if (isset($_POST['submit'])){
 
 			$message = '';
 
-			if(count($results) > 0 && password_verify($_POST['password'], $results['password']) ){
+			if($results > 0 && password_verify($_POST['password'], $results['password']) ){
 
 				$_SESSION['user_id'] = $results['id'];
 				header("Location: /");
@@ -79,8 +75,6 @@ if (isset($_POST['submit'])){
 		} else {
 			echo 'Index.php: Wrong settings specified in settings file' . '<br>';
 		}
-
-
 	}
 }
 
@@ -93,31 +87,31 @@ if (isset($_POST['submit'])){
 		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 		<link href='http://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
 	</head>
-		<body>
-			<form action="index.php" method="POST">
-				
-				<input name="difficulty" type="submit" value="low" style="width: 100px; background-color: green">
-				<input name="difficulty" type="submit" value="medium" style="width: 100px; background-color: orange">
-				<input name="difficulty" type="submit" value="high" style="width: 100px; background-color: red">
-
-			</form>
-
-			<div class="header">
-				<a href="/">Your App Name</a>
-			</div>
+	<body>
+		<form action="#" method="POST">
 			
-			<?php if(!empty($user)){ ?>
+			<input name="difficulty" type="submit" value="low" style="width: 100px; background-color: green">
+			<input name="difficulty" type="submit" value="medium" style="width: 100px; background-color: orange">
+			<input name="difficulty" type="submit" value="high" style="width: 100px; background-color: red">
 
-				<br />Welcome <?= $user['email']; ?> 
-				<br /><br />You are successfully logged in!
-				<br /><br />
-				<a href="logout.php">Logout?</a>
+		</form>
 
-			<?php }else{ ?>
+		<div class="header">
+			<a href="/">SecurityApp - DIfficulty <?php echo $_SESSION['difficulty'] ?></a>
+		</div>
+		
+		<?php if(!empty($user)){ ?>
 
-			<?php if(!empty($message)){ ?>
-				<p><?php $message ?></p>
-			<?php } ?>
+			<br />Welcome <?= $user['email']; ?> 
+			<br /><br />You are successfully logged in!
+			<br /><br />
+			<a href="logout.php">Logout?</a>
+
+		<?php }else{ ?>
+
+		<?php if(!empty($message)){ ?>
+			<p><?php echo $message ?></p>
+		<?php } ?>
 
 			<h1>Login</h1>
 			<span>or <a href="register.php">register here</a></span>

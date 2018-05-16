@@ -51,32 +51,30 @@ function checkEmail($email) {
 
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Register Below</title>
-	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-	<link href='http://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
-</head>
-<body>
+	<head>
+		<title>Register Below</title>
+		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+		<link href='http://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
+	</head>
+	<body>
+		<div class="header">
+			<a href="/">SecurityApp - DIfficulty <?php echo $_SESSION['difficulty'] ?></a>
+		</div>
 
-	<div class="header">
-		<a href="/">Your App Name</a>
-	</div>
+		<?php if(!empty($message)){ ?>
+			<p><?php echo $message ?></p>
+		<?php } ?>
 
-	<?php if(!empty($message)): ?>
-		<p><?= $message ?></p>
-	<?php endif; ?>
+		<h1>Register</h1>
+		<span>or <a href="index.php">login here</a></span>
 
-	<h1>Register</h1>
-	<span>or <a href="index.php">login here</a></span>
+		<form action="register.php" method="POST">
+			
+			<input type="text" placeholder="Enter your email" name="email">
+			<input type="password" placeholder="and password" name="password">
+			<input type="password" placeholder="confirm password" name="confirm_password">
+			<input name="submit" type="submit" value="Registreren">
 
-	<form action="register.php" method="POST">
-		
-		<input type="text" placeholder="Enter your email" name="email">
-		<input type="password" placeholder="and password" name="password">
-		<input type="password" placeholder="confirm password" name="confirm_password">
-		<input name="submit" type="submit" value="Registreren">
-
-	</form>
-
-</body>
+		</form>
+	</body>
 </html>
