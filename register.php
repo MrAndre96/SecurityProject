@@ -1,6 +1,10 @@
 <?php
 session_start();
-
+if (isset($_POST['difficulty'])) {
+	$_SESSION['difficulty'] = $_POST['difficulty'];
+} else if(empty($_SESSION['difficulty'])) {
+	$_SESSION['difficulty'] = 'low';
+}
 if( isset($_SESSION['user_id']) ){
 	header("Location: index.php");
 }
@@ -18,13 +22,19 @@ if (isset($_POST['submit'])){
 		} elseif($_POST['password'] != $_POST['confirm_password']) {
 			$message = "Your passwords don't match";
 		} else {
+            try{
+                $conn = new PDO("mysql:host=$server;dbname=$database;", $username, $password);
+            } catch(PDOException $e){
+                die( "Connection failed: " . $e->getMessage());
+            }
 			// Enter the new user in the database
 			$sql = "INSERT INTO users (email, password) VALUES (:email, :password)";
 			$stmt = $conn->prepare($sql);
 
 			$stmt->bindParam(':email', $_POST['email']);
-			$hash = password_hash($_POST['password'], PASSWORD_BCRYPT);
-			$stmt->bindParam(':password', $hash);
+
+			$pass = ($_SESSION['difficulty'] == 'high') ? password_hash($_POST['password'], PASSWORD_BCRYPT) : $_POST['password'];
+			$stmt->bindParam(':password', $pass);
 
 			if ($stmt->execute()) {
 				$message = 'Successfully created new user';
@@ -57,8 +67,29 @@ function checkEmail($email) {
 		<link href='http://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
 	</head>
 	<body>
+		<form action="index.php" method="POST">
+			Security Level:&nbsp
+			<?php if($_POST['difficulty'] == 'low'){ ?>
+				<input name="difficulty" type="submit" value="low" style="width: 100px; background-color: red">
+			<?php } else{ ?>
+				<input name="difficulty" type="submit" value="low" style="width: 100px; background-color: gray">
+			<?php }?>
+
+			<?php if($_POST['difficulty'] == 'medium'){ ?>
+				<input name="difficulty" type="submit" value="medium" style="width: 100px; background-color: orange">
+			<?php } else{ ?>
+				<input name="difficulty" type="submit" value="medium" style="width: 100px; background-color: gray">
+			<?php }?>
+
+			<?php if($_POST['difficulty'] == 'high'){ ?>
+				<input name="difficulty" type="submit" value="high" style="width: 100px; background-color: green">
+			<?php } else{ ?>
+				<input name="difficulty" type="submit" value="high" style="width: 100px; background-color: gray">
+			<?php }?>
+		</form>
+
 		<div class="header">
-			<a href="/">SecurityApp - DIfficulty <?php echo $_SESSION['difficulty'] ?></a>
+			<a href="/">Temp App Name</a>
 		</div>
 
 		<?php if(!empty($message)){ ?>

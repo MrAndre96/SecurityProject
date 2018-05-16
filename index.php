@@ -8,9 +8,9 @@ if (isset($_POST['difficulty'])) {
 require 'database.php';
 
 if( isset($_SESSION['user_id']) ){
-	if($_SESSION['difficulty'] == 'low'){
+	if($_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium'){
 		$sql='SELECT id,email,password FROM users WHERE id="'.$_SESSION['user_id'].'"';
-			
+
 		$records = mysqli_query($connection, $sql);
 		$results = mysqli_fetch_array($records,MYSQLI_ASSOC);
 		$user = NULL;
@@ -37,7 +37,7 @@ if (isset($_POST['submit'])){
 		if($_SESSION['difficulty'] == 'low'){
 			//Check username and password from database
 			$sql='SELECT id,email,password FROM users WHERE email="'.$_POST['email'].'" && password="'.$_POST['password'].'"';
-			
+
 			$records = mysqli_query($connection, $sql);
 			$results = mysqli_fetch_array($records,MYSQLI_ASSOC);
 			$message = '';
@@ -50,11 +50,20 @@ if (isset($_POST['submit'])){
 			}
 
 		} else if($_SESSION['difficulty'] == 'medium'){
-			  preg_match_all("/([A-z 0-9_]+)/", $_POST['email'], $out, 0); // Search the input for all characters between [] and store them in $out
-			  $email = $out[0][0]; // Access the first element (2D array)
-			  $query  = 'SELECT id,email,password FROM users WHERE email =\'' . $email . '\';'; // Do the query using the fixed.
-			  echo $query;
-			  $result = mysqli_query($connection, $query);
+            preg_match_all("/([A-z0-9@._]+)/", $_POST['email'], $out, 0); // Search the input for all characters between [] and store them in $out
+            $email = $out[0][0]; // Access the first element (2D array)
+            $sql  = 'SELECT id,email,password FROM users WHERE email ="'.$email.'" && password="'.$_POST['password'].'"';
+
+            $records = mysqli_query($connection, $sql);
+            $results = mysqli_fetch_array($records,MYSQLI_ASSOC);
+            $message = '';
+
+            if($results){
+                $_SESSION['user_id'] = $results['id'];
+                header("Location: /");
+            } else {
+                $message = 'Sorry, those credentials do not match';
+            }
 
 		} else if($_SESSION['difficulty'] == 'high'){
 			$records = $conn->prepare('SELECT id,email,password FROM users WHERE email = :email');
@@ -88,21 +97,34 @@ if (isset($_POST['submit'])){
 		<link href='http://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
 	</head>
 	<body>
-		<form action="#" method="POST">
-			
-			<input name="difficulty" type="submit" value="low" style="width: 100px; background-color: green">
-			<input name="difficulty" type="submit" value="medium" style="width: 100px; background-color: orange">
-			<input name="difficulty" type="submit" value="high" style="width: 100px; background-color: red">
+		<form action="index.php" method="POST">
+			Security Level:&nbsp
+			<?php if($_POST['difficulty'] == 'low'){ ?>
+				<input name="difficulty" type="submit" value="low" style="width: 100px; background-color: red">
+			<?php } else{ ?>
+				<input name="difficulty" type="submit" value="low" style="width: 100px; background-color: gray">
+			<?php }?>
 
+			<?php if($_POST['difficulty'] == 'medium'){ ?>
+				<input name="difficulty" type="submit" value="medium" style="width: 100px; background-color: orange">
+			<?php } else{ ?>
+				<input name="difficulty" type="submit" value="medium" style="width: 100px; background-color: gray">
+			<?php }?>
+
+			<?php if($_POST['difficulty'] == 'high'){ ?>
+				<input name="difficulty" type="submit" value="high" style="width: 100px; background-color: green">
+			<?php } else{ ?>
+				<input name="difficulty" type="submit" value="high" style="width: 100px; background-color: gray">
+			<?php }?>
 		</form>
 
 		<div class="header">
-			<a href="/">SecurityApp - DIfficulty <?php echo $_SESSION['difficulty'] ?></a>
+			<a href="/">Temp App Name</a>
 		</div>
-		
+
 		<?php if(!empty($user)){ ?>
 
-			<br />Welcome <?= $user['email']; ?> 
+			<br />Welcome <?= $user['email']; ?>
 			<br /><br />You are successfully logged in!
 			<br /><br />
 			<a href="logout.php">Logout?</a>
@@ -117,7 +139,7 @@ if (isset($_POST['submit'])){
 			<span>or <a href="register.php">register here</a></span>
 
 			<form action="#" method="POST">
-				
+
 				<input type="text" placeholder="Enter your email" name="email">
 				<input type="password" placeholder="and password" name="password">
 

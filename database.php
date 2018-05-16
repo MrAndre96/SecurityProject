@@ -4,16 +4,14 @@ $username = 'root';
 $password = '';
 $database = 'SecurityProject';
 
-if($_SESSION['difficulty'] == 'low'){
+if(isset($_SESSION['difficulty']) && $_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium'){
 	$connection = mysqli_connect($server, $username, $password, $database);
 	if (!$connection)
 	{
 		die('Could not connect: ' . mysql_error());
 	}
 
-} else if($_SESSION['difficulty'] == 'medium'){
-
-} else if($_SESSION['difficulty'] == 'high'){
+} else if(isset($_SESSION['difficulty']) && $_SESSION['difficulty'] == 'high'){
 	try{
 		$conn = new PDO("mysql:host=$server;dbname=$database;", $username, $password);
 	} catch(PDOException $e){
