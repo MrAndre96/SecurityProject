@@ -99,19 +99,19 @@ if (isset($_POST['submit'])){
 	<body>
 		<form action="index.php" method="POST">
 			Security Level:&nbsp
-			<?php if($_POST['difficulty'] == 'low'){ ?>
+			<?php if($_SESSION['difficulty'] == 'low'){ ?>
 				<input name="difficulty" type="submit" value="low" style="width: 100px; background-color: red">
 			<?php } else{ ?>
 				<input name="difficulty" type="submit" value="low" style="width: 100px; background-color: gray">
 			<?php }?>
 
-			<?php if($_POST['difficulty'] == 'medium'){ ?>
+			<?php if($_SESSION['difficulty'] == 'medium'){ ?>
 				<input name="difficulty" type="submit" value="medium" style="width: 100px; background-color: orange">
 			<?php } else{ ?>
 				<input name="difficulty" type="submit" value="medium" style="width: 100px; background-color: gray">
 			<?php }?>
 
-			<?php if($_POST['difficulty'] == 'high'){ ?>
+			<?php if($_SESSION['difficulty'] == 'high'){ ?>
 				<input name="difficulty" type="submit" value="high" style="width: 100px; background-color: green">
 			<?php } else{ ?>
 				<input name="difficulty" type="submit" value="high" style="width: 100px; background-color: gray">
