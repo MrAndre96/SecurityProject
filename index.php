@@ -52,7 +52,10 @@ if (isset($_POST['submit'])){
 		} else if($_SESSION['difficulty'] == 'medium'){
             preg_match_all("/([A-z0-9@._]+)/", $_POST['email'], $out, 0); // Search the input for all characters between [] and store them in $out
             $email = $out[0][0]; // Access the first element (2D array)
-            $sql  = 'SELECT id,email,password FROM users WHERE email ="'.$email.'" && password="'.$_POST['password'].'"';
+
+            preg_match_all("/([A-z0-9@._!@#$%^*()]+)/", $_POST['password'], $out, 0); // Search the input for all characters between [] and store them in $out
+            $password = $out[0][0]; // Access the first element (2D array)
+            $sql  = 'SELECT id,email,password FROM users WHERE email ="'.$email.'" && password="'.$password.'"';
 
             $records = mysqli_query($connection, $sql);
             $results = mysqli_fetch_array($records,MYSQLI_ASSOC);
