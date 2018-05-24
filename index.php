@@ -13,21 +13,14 @@ if( isset($_SESSION['user_id']) ){
 
 		$records = mysqli_query($connection, $sql);
 		$results = mysqli_fetch_array($records,MYSQLI_ASSOC);
-		$user = NULL;
-		if(count($results) > 0){
-			$user = $results;
-		}
+		$user = $results;
 	} else if($_SESSION['difficulty'] == 'high'){
 		$records = $conn->prepare('SELECT id,email,password FROM users WHERE id = :id');
 		$records->bindParam(':id', $_SESSION['user_id']);
 		$records->execute();
 		$results = $records->fetch(PDO::FETCH_ASSOC);
 
-		$user = NULL;
-
-		if(count($results) > 0){
-			$user = $results;
-		}
+		$user = $results;
 	}
 }
 
@@ -100,7 +93,7 @@ if (isset($_POST['submit'])){
 		<link href='http://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
 	</head>
 	<body>
-		<form action="index.php" method="POST">
+		<form action="#" method="POST">
 			Security Level:&nbsp
 			<?php if($_SESSION['difficulty'] == 'low'){ ?>
 				<input name="difficulty" type="submit" value="low" style="width: 100px; background-color: red">
@@ -130,7 +123,7 @@ if (isset($_POST['submit'])){
 			<br />Welcome <?= $user['email']; ?>
 			<br /><br />You are successfully logged in!
 			<br /><br />
-			<a href="logout.php">Logout?</a>
+			<a href="logout">Logout?</a>
 
 		<?php }else{ ?>
 
@@ -139,7 +132,7 @@ if (isset($_POST['submit'])){
 		<?php } ?>
 
 			<h1>Login</h1>
-			<span>or <a href="register.php">register here</a></span>
+			<span>or <a href="register">register here</a></span>
 
 			<form action="#" method="POST">
 
