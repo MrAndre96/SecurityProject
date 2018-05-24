@@ -19,7 +19,7 @@ if (isset($_POST['submit'])){
 		} elseif(strlen($_POST['password']) < 6) {
 			$message = "Your password must be at least 6 characters";
 		} elseif(strlen($_POST['username']) < 4) {
-			$message = "Your username must be at least 6 characters";
+			$message = "Your username must be at least 4 characters";
 		} elseif($_POST['password'] != $_POST['confirm_password']) {
 			$message = "Your passwords don't match";
 		} else {
@@ -33,7 +33,6 @@ if (isset($_POST['submit'])){
 			$stmt = $conn->prepare($sql);
 
 			$stmt->bindParam(':email', $_POST['email']);
-
 			$pass = ($_SESSION['difficulty'] == 'high') ? password_hash($_POST['password'], PASSWORD_BCRYPT) : $_POST['password'];
 			$stmt->bindParam(':password', $pass);
 			$stmt->bindParam(':username', $_POST['username']);

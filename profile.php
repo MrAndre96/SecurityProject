@@ -74,8 +74,8 @@ if($_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium'){
 			<b>YOU HAVE GAINED ACCESS TO THE SUPER SECRET INFORMATION!</b>
 		</div>
 		
-		<br />Welcome on the profile of <?= $user['username']; ?>
-		<br /><br />Personal message<br />
+		<br>Welcome on the profile of <?= $user['username']; ?>
+		<br><br>Personal message<br>
 		<?php if(!empty($user['message'])){
 			if($_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium'){
 				echo $user['message'];

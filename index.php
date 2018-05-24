@@ -13,13 +13,11 @@ require 'database.php';
 if (isset($_POST['submit'])){
 	$message = '';
 	if(!empty($_POST['email']) && !empty($_POST['password'])){
-
 		if($_SESSION['difficulty'] == 'low'){
 			//Check username and password from database
 			$sql='SELECT id,email,password FROM users WHERE email="'.$_POST['email'].'" && password="'.$_POST['password'].'"';
-
-			$records = mysqli_query($connection, $sql);
-			$results = mysqli_fetch_array($records,MYSQLI_ASSOC);
+			$get_user = mysqli_query($connection, $sql);
+			$results = mysqli_fetch_array($get_user,MYSQLI_ASSOC);
 
 			if($results){
 				$_SESSION['user_id'] = $results['id'];
@@ -27,17 +25,15 @@ if (isset($_POST['submit'])){
 			} else {
 				$message = 'Sorry, those credentials do not match';
 			}
-
-		} else if($_SESSION['difficulty'] == 'medium'){
+		}elseif($_SESSION['difficulty'] == 'medium'){
             preg_match_all("/([A-z0-9@._]+)/", $_POST['email'], $out, 0); // Search the input for all characters between [] and store them in $out
             $email = $out[0][0]; // Access the first element (2D array)
-
             preg_match_all("/([A-z0-9@._!@#$%^*()]+)/", $_POST['password'], $out, 0); // Search the input for all characters between [] and store them in $out
             $password = $out[0][0]; // Access the first element (2D array)
+			
             $sql  = 'SELECT id,email,password FROM users WHERE email ="'.$email.'" && password="'.$password.'"';
-
-            $records = mysqli_query($connection, $sql);
-            $results = mysqli_fetch_array($records,MYSQLI_ASSOC);
+            $get_user = mysqli_query($connection, $sql);
+            $results = mysqli_fetch_array($get_user,MYSQLI_ASSOC);
 
             if($results){
                 $_SESSION['user_id'] = $results['id'];
@@ -45,12 +41,11 @@ if (isset($_POST['submit'])){
             } else {
                 $message = 'Sorry, those credentials do not match';
             }
-
 		}else{
-			$records = $conn->prepare('SELECT id,email,password FROM users WHERE email = :email');
-			$records->bindParam(':email', $_POST['email']);
-			$records->execute();
-			$results = $records->fetch(PDO::FETCH_ASSOC);
+			$get_user = $conn->prepare('SELECT id,email,password FROM users WHERE email = :email');
+			$get_user->bindParam(':email', $_POST['email']);
+			$get_user->execute();
+			$results = $get_user->fetch(PDO::FETCH_ASSOC);
 
 			if($results > 0 && password_verify($_POST['password'], $results['password']) ){
 				$_SESSION['user_id'] = $results['id'];
