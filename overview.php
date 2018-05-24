@@ -3,13 +3,19 @@
 session_start();
 require 'database.php';
 
+$name = "default";
+
 		if($_SESSION['difficulty'] == 'low'){
-			
-			
+			$result = mysqli_query($connection,"SELECT id,message FROM messages");
+
 		}
 		else {
 			if(isset($_SESSION['user_id'])){
-				
+			
+			$result = mysqli_query($connection,"SELECT id,message FROM messages");
+			$name = mysqli_query($connection,"SELECT email FROM users where id = " . $_SESSION['user_id']);
+
+
 			}
 
 			else {
@@ -19,7 +25,6 @@ require 'database.php';
 			}
 		}
 				
-		$result = mysqli_query($connection,"SELECT id,message FROM messages");
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +39,7 @@ require 'database.php';
 	<body>
 
 <br/>
-	<b>Welcome <?php echo $_SESSION['user_name']; ?>, You are succesfully logged in!</b>
+	<b>Welcome <?php echo $name; ?>, You are succesfully logged in!</b>
 		</br><br/>
 					<a href='logout.php'>Logout?</a>
 </br>

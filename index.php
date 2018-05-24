@@ -124,16 +124,10 @@ if (isset($_POST['submit'])){
 		<div class="header">
 			<a href="/">Temp App Name</a>
 		</div>
-
-
-
-
-		
 		
 		<?php if(!empty($message)){ ?>
 			<p><?php echo $message ?></p>
 		<?php } ?>
-
 
 			<h1>Login</h1>
 			<span>or <a href="register">register here</a></span>
