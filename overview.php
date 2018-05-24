@@ -2,11 +2,7 @@
 
 session_start();
 require 'database.php';
-//bklasddsa
-//asdsa
-//ads
-//asdas
-//dasd
+
 $name = "default";
 
 		if($_SESSION['difficulty'] == 'low'){
