@@ -4,6 +4,7 @@ session_start();
 require 'database.php';
 //bklasddsa
 //asdsa
+//ads
 $name = "default";
 
 		if($_SESSION['difficulty'] == 'low'){
