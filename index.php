@@ -122,8 +122,9 @@ if (isset($_POST['submit'])){
 		</form>
 
 		<div class="header">
-			<a href="/">Temp App Name</a>
-		</div>
+            <a>SUPER SECRET INFORMATION NOT TO BE SEEN BY ANYONE WITHOUT ACCOUNT!</a><br>
+            <a>(Click register here to create account) OTHERWISE NO ACCESS!!!</a>
+        </div>
 
 
 
