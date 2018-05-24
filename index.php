@@ -122,7 +122,8 @@ if (isset($_POST['submit'])){
 		</form>
 
 		<div class="header">
-			<a href="/">Temp App Name</a>
+			<a>SUPER SECRET INFORMATION NOT TO BE SEEN BY ANYONE WITHOUT ACCOUNT!</a><br>
+            <a>(Click register here to create account) OTHERWISE NO ACCESS!!!</a>
 		</div>
 
 		<?php if(!empty($user)){ ?>
@@ -131,6 +132,10 @@ if (isset($_POST['submit'])){
 			<br /><br />You are successfully logged in!
 			<br /><br />
 			<a href="logout.php">Logout?</a>
+
+            <br><br><b>Here's the super secret information:</b><br>
+            <br> The chicken did not cross the road to get to the other side.
+            <br> It was a duck.
 
 		<?php }else{ ?>
 
@@ -146,7 +151,7 @@ if (isset($_POST['submit'])){
 				<input type="text" placeholder="Enter your email" name="email">
 				<input type="password" placeholder="and password" name="password">
 
-				<input name="submit" type="submit" value="Inloggen">
+				<input name="submit" type="submit" value="Log in">
 
 			</form>
 
