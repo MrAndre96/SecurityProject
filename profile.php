@@ -13,9 +13,9 @@ if (isset($_GET['user'])) {
 
 if($_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium'){
 	$sql='SELECT id,email,username,message FROM users WHERE username="'.$get_user.'" LIMIT 1';
-
 	$get_user_result = mysqli_query($connection, $sql);
 	$user = mysqli_fetch_array($get_user_result,MYSQLI_ASSOC);
+	
 	if(!$user && empty($get_user) && $_SESSION['user_id']){
 		$sql='SELECT id,email,username,message FROM users WHERE id="'.$_SESSION['user_id'].'"';
 		$get_user_result = mysqli_query($connection, $sql);
@@ -23,12 +23,12 @@ if($_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium'){
 	}elseif(!$user){
 		header("Location: ../index");
 	}
-	
-} else if($_SESSION['difficulty'] == 'high'){
+}else{
 	$get_user_result = $conn->prepare('SELECT id,email,username,message FROM users WHERE username = :username LIMIT 1');
 	$get_user_result->bindParam(':username', $get_user);
 	$get_user_result->execute();
 	$user = $get_user_result->fetch(PDO::FETCH_ASSOC);
+	
 	if(!$user && empty($get_user) && $_SESSION['user_id']){
 		$get_user_result = $conn->prepare('SELECT id,email,username,message FROM users WHERE id = :id');
 		$get_user_result->bindParam(':id', $_SESSION['user_id']);
@@ -37,7 +37,6 @@ if($_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium'){
 	}elseif(!$user){
 		header("Location: ../index");
 	}
-	
 }
 
 ?>
@@ -45,7 +44,7 @@ if($_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium'){
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Profile of <?php echo $user['username'] ?></title>
+		<title>Profile: <?php echo $user['username'] ?></title>
 		<link rel="stylesheet" type="text/css" href="../assets/css/style.css">
 		<link href='http://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
 	</head>
@@ -72,12 +71,17 @@ if($_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium'){
 		</form>
 
 		<div class="header">
-			<a href="/">Temp App Name</a>
+			<b>YOU HAVE GAINED ACCESS TO THE SUPER SECRET INFORMATION!</b>
 		</div>
+		
 		<br />Welcome on the profile of <?= $user['username']; ?>
 		<br /><br />Personal message<br />
 		<?php if(!empty($user['message'])){
-			echo $user['message'];
+			if($_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium'){
+				echo $user['message'];
+			}else{
+				echo htmlentities($user['message']);
+			}
 		}else{
 			echo ''.$user['username'].' does not have a personal message currently.';
 		}

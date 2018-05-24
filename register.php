@@ -6,14 +6,13 @@ if (isset($_POST['difficulty'])) {
 	$_SESSION['difficulty'] = 'low';
 }
 if( isset($_SESSION['user_id']) ){
-	header("Location: index");
+	header("Location: overview");
 }
-
 require 'database.php';
 
-$message = '';
 if (isset($_POST['submit'])){
 	if(!empty($_POST['email']) && !empty($_POST['password']) && !empty($_POST['confirm_password'])) {
+		$message = '';
 
 		if(!checkEmail($_POST['email'])){
 			$message = "Incorrect email";
@@ -45,7 +44,7 @@ if (isset($_POST['submit'])){
 				$message = 'There was an issue creating your account. Please try again later';
 			}
 		}
-	} elseif (!empty($_POST)) {
+	} else {
 		$message = "Fill in all fields to register";
 	}
 }
@@ -65,7 +64,7 @@ function checkEmail($email) {
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Register Below</title>
+		<title>Register</title>
 		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 		<link href='http://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
 	</head>
@@ -92,7 +91,8 @@ function checkEmail($email) {
 		</form>
 
 		<div class="header">
-			<a href="/">Create account here</a>
+			<b>SUPER SECRET INFORMATION NOT TO BE SEEN BY ANYONE WITHOUT ACCOUNT!<br>
+			FILL IN THE FORM BELOW TO GAIN ACCESS TO OUR INFORMATION</b>
 		</div>
 
 		<?php if(!empty($message)){ ?>

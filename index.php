@@ -5,26 +5,13 @@ if (isset($_POST['difficulty'])) {
 } else if(empty($_SESSION['difficulty'])) {
 	$_SESSION['difficulty'] = 'low';
 }
+if( isset($_SESSION['user_id']) ){
+	header("Location: overview");
+}
 require 'database.php';
 
-if( isset($_SESSION['user_id']) ){
-	if($_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium'){
-		$sql='SELECT id,email,password FROM users WHERE id="'.$_SESSION['user_id'].'"';
-
-		$records = mysqli_query($connection, $sql);
-		$results = mysqli_fetch_array($records,MYSQLI_ASSOC);
-		$user = $results;
-	} else if($_SESSION['difficulty'] == 'high'){
-		$records = $conn->prepare('SELECT id,email,password FROM users WHERE id = :id');
-		$records->bindParam(':id', $_SESSION['user_id']);
-		$records->execute();
-		$results = $records->fetch(PDO::FETCH_ASSOC);
-
-		$user = $results;
-	}
-}
-
 if (isset($_POST['submit'])){
+	$message = '';
 	if(!empty($_POST['email']) && !empty($_POST['password'])){
 
 		if($_SESSION['difficulty'] == 'low'){
@@ -33,11 +20,10 @@ if (isset($_POST['submit'])){
 
 			$records = mysqli_query($connection, $sql);
 			$results = mysqli_fetch_array($records,MYSQLI_ASSOC);
-			$message = '';
 
 			if($results){
 				$_SESSION['user_id'] = $results['id'];
-				header("Location: /");
+				header("Location: overview");
 			} else {
 				$message = 'Sorry, those credentials do not match';
 			}
@@ -52,34 +38,29 @@ if (isset($_POST['submit'])){
 
             $records = mysqli_query($connection, $sql);
             $results = mysqli_fetch_array($records,MYSQLI_ASSOC);
-            $message = '';
 
             if($results){
                 $_SESSION['user_id'] = $results['id'];
-                header("Location: /");
+                header("Location: overview");
             } else {
                 $message = 'Sorry, those credentials do not match';
             }
 
-		} else if($_SESSION['difficulty'] == 'high'){
+		}else{
 			$records = $conn->prepare('SELECT id,email,password FROM users WHERE email = :email');
 			$records->bindParam(':email', $_POST['email']);
 			$records->execute();
 			$results = $records->fetch(PDO::FETCH_ASSOC);
 
-			$message = '';
-
 			if($results > 0 && password_verify($_POST['password'], $results['password']) ){
-
 				$_SESSION['user_id'] = $results['id'];
-				header("Location: /");
-
-			} else {
+				header("Location: overview");
+			}else{
 				$message = 'Sorry, those credentials do not match';
 			}
-		} else {
-			echo 'Index.php: Wrong settings specified in settings file' . '<br>';
 		}
+	}else{
+		$message = 'Fill in all fields to log in';
 	}
 }
 
@@ -88,7 +69,7 @@ if (isset($_POST['submit'])){
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Login Below</title>
+		<title>Login</title>
 		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 		<link href='http://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
 	</head>
@@ -115,39 +96,24 @@ if (isset($_POST['submit'])){
 		</form>
 
 		<div class="header">
-			<a>SUPER SECRET INFORMATION NOT TO BE SEEN BY ANYONE WITHOUT ACCOUNT!</a><br>
-            <a>(Click register here to create account) OTHERWISE NO ACCESS!!!</a>
+			<b>SUPER SECRET INFORMATION NOT TO BE SEEN BY ANYONE WITHOUT ACCOUNT!<br>
+            (Click register here to create account) OTHERWISE NO ACCESS!!!</b>
 		</div>
-
-		<?php if(!empty($user)){ ?>
-
-			<br />Welcome <?= $user['email']; ?>
-			<br /><br />You are successfully logged in!
-			<br /><br />
-			<a href="logout">Logout?</a>
-
-            <br><br><b>Here's the super secret information:</b><br>
-            <br> The chicken did not cross the road to get to the other side.
-            <br> It was a duck.
-
-		<?php }else{ ?>
 
 		<?php if(!empty($message)){ ?>
 			<p><?php echo $message ?></p>
 		<?php } ?>
 
-			<h1>Login</h1>
-			<span>or <a href="register">register here</a></span>
+		<h1>Login</h1>
+		<span>or <a href="register">register here</a></span>
 
-			<form action="#" method="POST">
+		<form action="#" method="POST">
 
-				<input type="text" placeholder="Enter your email" name="email">
-				<input type="password" placeholder="and password" name="password">
+			<input type="text" placeholder="Enter your email" name="email">
+			<input type="password" placeholder="and password" name="password">
 
-				<input name="submit" type="submit" value="Log in">
+			<input name="submit" type="submit" value="Log in">
 
-			</form>
-
-		<?php } ?>
+		</form>
 	</body>
 </html>
