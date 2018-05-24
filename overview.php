@@ -6,6 +6,7 @@ require 'database.php';
 //asdsa
 //ads
 //asdas
+//dasd
 $name = "default";
 
 		if($_SESSION['difficulty'] == 'low'){
