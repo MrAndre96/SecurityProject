@@ -29,6 +29,7 @@ if( isset($_SESSION['user_id']) ){
 			$user = $results;
 		}
 	}
+	
 }
 
 if (isset($_POST['submit'])){
@@ -44,7 +45,9 @@ if (isset($_POST['submit'])){
 
 			if($results){
 				$_SESSION['user_id'] = $results['id'];
-				header("Location: /");
+				$_SESSION['user_name'] = $results['email'];
+
+				header("Location: /overview.php");
 			} else {
 				$message = 'Sorry, those credentials do not match';
 			}
@@ -63,7 +66,9 @@ if (isset($_POST['submit'])){
 
             if($results){
                 $_SESSION['user_id'] = $results['id'];
-                header("Location: /");
+				$_SESSION['user_name'] = $results['email'];
+
+                header("Location: /overview.php");
             } else {
                 $message = 'Sorry, those credentials do not match';
             }
@@ -79,7 +84,9 @@ if (isset($_POST['submit'])){
 			if($results > 0 && password_verify($_POST['password'], $results['password']) ){
 
 				$_SESSION['user_id'] = $results['id'];
-				header("Location: /");
+				$_SESSION['user_name'] = $results['email'];
+
+				header("Location: /overview.php");
 
 			} else {
 				$message = 'Sorry, those credentials do not match';
@@ -122,26 +129,13 @@ if (isset($_POST['submit'])){
 		</form>
 
 		<div class="header">
-			<a>SUPER SECRET INFORMATION NOT TO BE SEEN BY ANYONE WITHOUT ACCOUNT!</a><br>
-            <a>(Click register here to create account) OTHERWISE NO ACCESS!!!</a>
+			<a href="/">Temp App Name</a>
 		</div>
-
-		<?php if(!empty($user)){ ?>
-
-			<br />Welcome <?= $user['email']; ?>
-			<br /><br />You are successfully logged in!
-			<br /><br />
-			<a href="logout.php">Logout?</a>
-
-            <br><br><b>Here's the super secret information:</b><br>
-            <br> The chicken did not cross the road to get to the other side.
-            <br> It was a duck.
-
-		<?php }else{ ?>
 
 		<?php if(!empty($message)){ ?>
 			<p><?php echo $message ?></p>
 		<?php } ?>
+
 
 			<h1>Login</h1>
 			<span>or <a href="register.php">register here</a></span>
@@ -151,10 +145,9 @@ if (isset($_POST['submit'])){
 				<input type="text" placeholder="Enter your email" name="email">
 				<input type="password" placeholder="and password" name="password">
 
-				<input name="submit" type="submit" value="Log in">
+				<input name="submit" type="submit" value="Inloggen">
 
 			</form>
 
-		<?php } ?>
 	</body>
 </html>

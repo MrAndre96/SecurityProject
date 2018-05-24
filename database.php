@@ -1,7 +1,7 @@
 <?php
 $server = 'localhost';
 $username = 'root';
-$password = 'd8n2';
+$password = '';
 $database = 'securityproject';
 
 if(isset($_SESSION['difficulty']) && $_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium'){
