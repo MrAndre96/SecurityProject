@@ -5,6 +5,7 @@ require 'database.php';
 //bklasddsa
 //asdsa
 //ads
+//asdas
 $name = "default";
 
 		if($_SESSION['difficulty'] == 'low'){
