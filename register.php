@@ -6,7 +6,7 @@ if (isset($_POST['difficulty'])) {
 	$_SESSION['difficulty'] = 'low';
 }
 if( isset($_SESSION['user_id']) ){
-	header("Location: index.php");
+	header("Location: index");
 }
 
 require 'database.php';
@@ -19,6 +19,8 @@ if (isset($_POST['submit'])){
 			$message = "Incorrect email";
 		} elseif(strlen($_POST['password']) < 6) {
 			$message = "Your password must be at least 6 characters";
+		} elseif(strlen($_POST['username']) < 4) {
+			$message = "Your username must be at least 6 characters";
 		} elseif($_POST['password'] != $_POST['confirm_password']) {
 			$message = "Your passwords don't match";
 		} else {
@@ -28,13 +30,14 @@ if (isset($_POST['submit'])){
                 die( "Connection failed: " . $e->getMessage());
             }
 			// Enter the new user in the database
-			$sql = "INSERT INTO users (email, password) VALUES (:email, :password)";
+			$sql = "INSERT INTO users (email, password, username) VALUES (:email, :password, :username)";
 			$stmt = $conn->prepare($sql);
 
 			$stmt->bindParam(':email', $_POST['email']);
 
 			$pass = ($_SESSION['difficulty'] == 'high') ? password_hash($_POST['password'], PASSWORD_BCRYPT) : $_POST['password'];
 			$stmt->bindParam(':password', $pass);
+			$stmt->bindParam(':username', $_POST['username']);
 
 			if ($stmt->execute()) {
 				$message = 'Successfully created new user';
@@ -67,7 +70,7 @@ function checkEmail($email) {
 		<link href='http://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
 	</head>
 	<body>
-		<form action="index.php" method="POST">
+		<form action="#" method="POST">
 			Security Level:&nbsp
 			<?php if($_SESSION['difficulty'] == 'low'){ ?>
 				<input name="difficulty" type="submit" value="low" style="width: 100px; background-color: red">
@@ -97,11 +100,12 @@ function checkEmail($email) {
 		<?php } ?>
 
 		<h1>Register</h1>
-		<span>or <a href="index.php">login here</a></span>
+		<span>or <a href="index">login here</a></span>
 
-		<form action="register.php" method="POST">
+		<form action="#" method="POST">
 			
 			<input type="text" placeholder="Enter your email" name="email">
+			<input type="text" placeholder="Enter your username" name="username">
 			<input type="password" placeholder="and password" name="password">
 			<input type="password" placeholder="confirm password" name="confirm_password">
 			<input name="submit" type="submit" value="Register">
