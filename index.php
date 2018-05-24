@@ -125,6 +125,11 @@ if (isset($_POST['submit'])){
 			<a href="/">Temp App Name</a>
 		</div>
 
+
+
+
+		
+		
 		<?php if(!empty($message)){ ?>
 			<p><?php echo $message ?></p>
 		<?php } ?>
