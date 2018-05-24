@@ -2,7 +2,7 @@
 $server = 'localhost';
 $username = 'root';
 $password = '';
-$database = 'SecurityProject';
+$database = 'securityproject';
 
 if(isset($_SESSION['difficulty']) && $_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium'){
 	$connection = mysqli_connect($server, $username, $password, $database);

@@ -92,7 +92,7 @@ function checkEmail($email) {
 		</form>
 
 		<div class="header">
-			<a href="/">Temp App Name</a>
+			<a href="/">Create account here</a>
 		</div>
 
 		<?php if(!empty($message)){ ?>
@@ -108,7 +108,7 @@ function checkEmail($email) {
 			<input type="text" placeholder="Enter your username" name="username">
 			<input type="password" placeholder="and password" name="password">
 			<input type="password" placeholder="confirm password" name="confirm_password">
-			<input name="submit" type="submit" value="Registreren">
+			<input name="submit" type="submit" value="Register">
 
 		</form>
 	</body>
