@@ -108,12 +108,10 @@ if (isset($_POST['submit'])){
 		<span>or <a href="register">register here</a></span>
 
 		<form action="#" method="POST">
-
 			<input type="text" placeholder="Enter your email" name="email">
 			<input type="password" placeholder="and password" name="password">
 
 			<input name="submit" type="submit" value="Log in">
-
 		</form>
 	</body>
 </html>
