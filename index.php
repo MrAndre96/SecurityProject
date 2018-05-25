@@ -21,7 +21,14 @@ if (isset($_POST['submit'])){
 
 			if($results){
 				$_SESSION['user_id'] = $results['id'];
-				header("Location: overview?admin=false");
+                $sql = 'SELECT admin FROM users WHERE id ="'.$_SESSION['user_id'].'"';
+                $get_user = mysqli_query($connection, $sql);
+                $get_admin = mysqli_fetch_array($get_user,MYSQLI_ASSOC)['admin'];
+                $admin = 'false';
+                if($get_admin){
+                    $admin = 'true';
+                }
+				header("Location: overview?admin=".$admin);
 			} else {
 				$message = 'Sorry, those credentials do not match';
 			}
