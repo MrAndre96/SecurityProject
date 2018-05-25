@@ -12,45 +12,37 @@ if($_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium' && is
 	$message = mysqli_fetch_array($get_message,MYSQLI_ASSOC);
 	if ($_SESSION['difficulty'] == 'low' && isset($_GET['admin']) && $_GET['admin'] == 'true')
 	{
-	$admin = true;
+		$admin = true;
 	}
 	
 	if(isset($_SESSION['user_id']) && $_SESSION['difficulty'] == 'low'
 	|| $_SESSION['difficulty'] == 'medium'){
-		$sql = 'SELECT id,email,username FROM users WHERE id ="'.$_SESSION['user_id'].'"';
+		$sql = 'SELECT id,email,username,admin FROM users WHERE id ="'.$_SESSION['user_id'].'"';
 		$get_user = mysqli_query($connection, $sql);
 		$user = mysqli_fetch_array($get_user,MYSQLI_ASSOC);
+		
+		if($user['admin']){
+			$admin = true;
+		}
 	}else{
 		$user = null;
 	}
 }elseif($_SESSION['difficulty'] == 'high' && isset($_SESSION['user_id'])){
-	$get_user = $conn->prepare('SELECT id,email,username FROM users WHERE id = :id');
+	$get_user = $conn->prepare('SELECT id,email,username,admin FROM users WHERE id = :id');
     $get_user->bindParam(':id', $_SESSION['user_id']);
     $get_user->execute();
     $user = $get_user->fetch(PDO::FETCH_ASSOC);
+	
+	if($user['admin']){
+        $admin = true;
+    }
 	
 	$get_message = $conn->prepare('SELECT id,title,message FROM messages');
 	$get_message->execute();
 }else{
 	header("Location: index");
 }
-if($_SESSION['difficulty'] == 'high' && isset($_SESSION['user_id'])){
 
-    $get_user = $conn->prepare('SELECT admin FROM users WHERE id = :id');
-    $get_user->bindParam(':id', $_SESSION['user_id']);
-    $get_user->execute();
-    $get_admin = $get_user->fetch(PDO::FETCH_ASSOC)['admin'];
-    if($get_admin == 1){
-        $admin = true;
-    }
-}elseif($_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium' && isset($_SESSION['user_id'])){
-    $sql = 'SELECT admin FROM users WHERE id ="'.$_SESSION['user_id'].'"';
-    $get_user = mysqli_query($connection, $sql);
-    $get_admin = mysqli_fetch_array($get_user,MYSQLI_ASSOC)['admin'];
-    if($get_admin == 1){
-        $admin = true;
-    }
-}
 ?>
 
 <!DOCTYPE html>
