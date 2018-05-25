@@ -5,10 +5,15 @@ if (isset($_POST['difficulty'])) {
 } else if(empty($_SESSION['difficulty'])) {
 	$_SESSION['difficulty'] = 'low';
 }
+$admin = false;
 require 'database.php';
 if($_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium' && isset($_SESSION['user_id'])){
 	$get_message = mysqli_query($connection,"SELECT id,title,message FROM messages");
 	$message = mysqli_fetch_array($get_message,MYSQLI_ASSOC);
+	if ($_SESSION['difficulty'] == 'low' && isset($_GET['admin']) && $_GET['admin'] == 'true')
+	{
+	$admin = true;
+	}
 	
 	if(isset($_SESSION['user_id']) && $_SESSION['difficulty'] == 'low'
 	|| $_SESSION['difficulty'] == 'medium'){
@@ -20,14 +25,31 @@ if($_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium' && is
 	}
 }elseif($_SESSION['difficulty'] == 'high' && isset($_SESSION['user_id'])){
 	$get_user = $conn->prepare('SELECT id,email,username FROM users WHERE id = :id');
-	$get_user->bindParam(':id', $_SESSION['user_id']);
-	$get_user->execute();
-	$user = $get_user->fetch(PDO::FETCH_ASSOC);
+    $get_user->bindParam(':id', $_SESSION['user_id']);
+    $get_user->execute();
+    $user = $get_user->fetch(PDO::FETCH_ASSOC);
 	
 	$get_message = $conn->prepare('SELECT id,title,message FROM messages');
 	$get_message->execute();
 }else{
 	header("Location: index");
+}
+if($_SESSION['difficulty'] == 'high' && isset($_SESSION['user_id'])){
+
+    $get_user = $conn->prepare('SELECT admin FROM users WHERE id = :id');
+    $get_user->bindParam(':id', $_SESSION['user_id']);
+    $get_user->execute();
+    $get_admin = $get_user->fetch(PDO::FETCH_ASSOC)['admin'];
+    if($get_admin == 1){
+        $admin = true;
+    }
+}elseif($_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium' && isset($_SESSION['user_id'])){
+    $sql = 'SELECT admin FROM users WHERE id ="'.$_SESSION['user_id'].'"';
+    $get_user = mysqli_query($connection, $sql);
+    $get_admin = mysqli_fetch_array($get_user,MYSQLI_ASSOC)['admin'];
+    if($get_admin == 1){
+        $admin = true;
+    }
 }
 ?>
 
@@ -79,6 +101,16 @@ if($_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium' && is
 			'.$row['message'].'
 			</td></tr></table><br>';
 		}
+		if ($admin){
+            echo '<table border="1" align="center">
+			<tr>
+			<th>ADMIN ONLY SECRET INFORMATION</th>
+			</tr>
+			<tr><td>
+			ADMINS ARE AWESOME! YOU LOOK GREAT! (Dont let anyone know)
+			</td></tr></table><br>';
+        }
+
 		?>
 	</body>
 </html>

@@ -53,16 +53,18 @@ CREATE TABLE `users` (
   `email` varchar(250) NOT NULL DEFAULT '',
   `username` varchar(25) NOT NULL,
   `password` varchar(200) NOT NULL DEFAULT '',
-  `message` varchar(200) DEFAULT NULL
+  `message` varchar(200) DEFAULT NULL,
+  `admin` boolean NOT NULL DEFAULT FALSE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Gegevens worden geëxporteerd voor tabel `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `username`, `password`, `message`) VALUES
-(1, 'admin@admin.com', 'admin', 'password', '<script>alert(\'Hey I can do this\')</script>'),
-(3, 'admin@admin.nl', 'adminnl', '$2y$10$QA5fIU0K0LGlN9ge3cY05emjsHU2.DZ9OlgnW6dKQ4ts/xfQFfcgq', '<script>alert(\'Hey I can do this\')</script>');
+INSERT INTO `users` (`id`, `email`, `username`, `password`, `message`, `admin`) VALUES
+(1, 'admin@admin.com', 'admin', 'password', '<script>alert(\'Hey I can do this\')</script>', true),
+(2, 'admin@admin.nl', 'adminnl', '$2y$10$QA5fIU0K0LGlN9ge3cY05emjsHU2.DZ9OlgnW6dKQ4ts/xfQFfcgq', '<script>alert(\'Hey I can do this\')</script>', true);
 
 --
 -- Indexen voor geëxporteerde tabellen

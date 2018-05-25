@@ -21,7 +21,7 @@ if (isset($_POST['submit'])){
 
 			if($results){
 				$_SESSION['user_id'] = $results['id'];
-				header("Location: overview");
+				header("Location: overview?admin=false");
 			} else {
 				$message = 'Sorry, those credentials do not match';
 			}
