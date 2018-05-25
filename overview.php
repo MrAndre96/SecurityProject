@@ -43,7 +43,7 @@ if($_SESSION['difficulty'] == 'high' && isset($_SESSION['user_id'])){
     if($get_admin == 1){
         $admin = true;
     }
-}elseif($_SESSION['difficulty'] == 'low' || $_SESSION['difficulty'] == 'medium' && isset($_SESSION['user_id'])){
+}elseif($_SESSION['difficulty'] == 'medium' && isset($_SESSION['user_id'])){
     $sql = 'SELECT admin FROM users WHERE id ="'.$_SESSION['user_id'].'"';
     $get_user = mysqli_query($connection, $sql);
     $get_admin = mysqli_fetch_array($get_user,MYSQLI_ASSOC)['admin'];
